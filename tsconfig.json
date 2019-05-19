@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "jsx": "react",
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["dom", "es2015"],
+    "jsxFactory": "h",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["types/*"],
+      "preact": ["./node_modules/preact/dist/preact.d.ts"],
+    },
+    "noEmitHelpers": true,
+    "importHelpers": true
+  }
+}
