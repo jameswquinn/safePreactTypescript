@@ -22,9 +22,15 @@ const path = require('path');
  *
  */
 
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+
+
+
+const autoprefixer = require("autoprefixer");
+const precss = require("precss");
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 
 module.exports = {
   module: {
@@ -35,7 +41,7 @@ module.exports = {
           {
             loader: "ts-loader",
             options: {
-              transpileOnly: true,
+              transpileOnly: true
               //experimentalWatchApi: true
             }
           }
@@ -55,23 +61,44 @@ module.exports = {
                 modules: false
               }
             ]
+          ],
+          plugins: [
+            [
+              "transform-react-jsx",
+              {
+                pragma: "h"
+              }
+            ]
           ]
         },
 
-        test: /\.js$/
+        test: /\.jsx?$/
       },
       {
-        test: /\.(scss|css)$/,
-
+        test: /\.s?[ac]ss$/,
         use: [
+          MiniCssExtractPlugin.loader,
           {
-            loader: "style-loader"
+            loader: "css-loader",
+            options: {
+              url: false,
+              sourceMap: false
+            }
           },
           {
-            loader: "css-loader"
+            loader: "postcss-loader",
+            options: {
+              plugins: function() {
+                return [precss, autoprefixer];
+              },
+              sourceMap: false
+            }
           },
           {
-            loader: "sass-loader"
+            loader: "sass-loader",
+            options: {
+              sourceMap: false
+            }
           }
         ]
       }
@@ -93,6 +120,9 @@ module.exports = {
         minifyCSS: true,
         minifyURLs: true
       }
+    }),
+    new MiniCssExtractPlugin({
+      filename: "[name]~[contentHash].css"
     })
   ],
   output: {
