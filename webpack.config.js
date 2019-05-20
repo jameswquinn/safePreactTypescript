@@ -184,6 +184,13 @@ module.exports = {
           }
         }
       },
+      /**
+       *
+       * @description
+       *
+       * @example '<img src="./path/example.jpg?sizes[]=100" alt="">'
+       * 
+       */
       {
         test: /\.(jpe?g|png)$/i,
         loader: "responsive-loader",
