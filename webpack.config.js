@@ -79,6 +79,7 @@ const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -213,7 +214,7 @@ module.exports = {
        * @description
        *
        * @example '<img src="./path/example.jpg?sizes[]=100" alt="">'
-       * 
+       *
        */
       {
         test: /\.(jpe?g|png)$/i,
@@ -232,8 +233,21 @@ module.exports = {
       dry: false
     }),
     new VueLoaderPlugin(),
+    new CopyWebpackPlugin(
+      [
+        { from: "icons", to: "." }
+      ]
+    ),
     new HtmlWebpackPlugin({
       template: "src/index.html",
+      meta: {
+        description: "Description website",
+        author: "James Quinn",
+        keywords: "website, with, meta, tags",
+        robots: "noindex, follow",
+        "revisit-after": "5 month",
+        image: "http://mywebsite.com/image.jpg"
+      },
       minify: {
         collapseWhitespace: true,
         removeComments: true,
