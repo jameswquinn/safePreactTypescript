@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Barebones starter project for Preact with TypeScript",
   "main": "index.js",
-  "author": "Nick Taylor <nick@iamdeveloper.com>",
+  "author": "James Quinn",
   "license": "MIT",
   "keywords": [
     "preact",
