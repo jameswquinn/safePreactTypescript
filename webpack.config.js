@@ -2,6 +2,34 @@ const webpack = require('webpack');
 const path = require('path');
 
 /*
+ * We've enabled Postcss, autoprefixer and precss for you. This allows your app
+ * to lint  CSS, support variables and mixins, transpile future CSS syntax,
+ * inline images, and more!
+ *
+ * To enable SASS or LESS, add the respective loaders to module.rules
+ *
+ * https://github.com/postcss/postcss
+ *
+ * https://github.com/postcss/autoprefixer
+ *
+ * https://github.com/jonathantneal/precss
+ *
+ */
+
+const autoprefixer = require("autoprefixer");
+const precss = require("precss");
+
+/*
+ * We've enabled TerserPlugin for you! This minifies your app
+ * in order to load faster and run less javascript.
+ *
+ * https://github.com/webpack-contrib/terser-webpack-plugin
+ *
+ */
+
+const TerserPlugin = require("terser-webpack-plugin");
+
+/*
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
  * should be splitted of chunk by heuristics using module duplication count and
@@ -14,11 +42,8 @@ const path = require('path');
  *
  */
 
-const autoprefixer = require("autoprefixer");
-const precss = require("precss");
 
 
-const TerserPlugin = require("terser-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
@@ -28,6 +53,8 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
+
+const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 
 module.exports = {
   mode: "production",
@@ -205,6 +232,11 @@ module.exports = {
     }),
     new CompressionPlugin({
       algorithm: "gzip"
+    }),
+    new WebpackBuildNotifierPlugin({
+      title: "My Project Webpack Build",
+      //logo: path.resolve("src/assets/icons/ios-icon.png"),
+      suppressSuccess: true
     }),
     new BundleAnalyzerPlugin({
       analyzerMode: "static"
