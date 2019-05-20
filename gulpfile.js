@@ -8,10 +8,11 @@ gulp.task("favicon", function() {
     .src("src/icons/assets/icon.png")
     .pipe(
       favicons({
-        appName: "App name",
-        appDescription: "App description",
+        appName: "twister",
+        appDescription: "Web social app",
         background: "#000",
         theme_color: "#fff",
+        lang: "en",
         path: ".",
         url: "https://example.io/",
         display: "standalone",

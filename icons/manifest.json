@@ -1,9 +1,9 @@
 {
-  "name": "App name",
-  "short_name": "App name",
-  "description": "App description",
+  "name": "twister",
+  "short_name": "twister",
+  "description": "Web social app",
   "dir": "auto",
-  "lang": "en-US",
+  "lang": "en",
   "display": "standalone",
   "orientation": "portrait",
   "start_url": "/?homescreen=1",
