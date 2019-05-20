@@ -21,8 +21,8 @@ gulp.task("favicon", function() {
         version: 1.0,
         logging: true,
         html: "index.html",
-        pipeHTML: true,
-        replace: true,
+        pipeHTML: false,
+        replace: false,
         icons: {
           // Platform Options:
           // - offset - offset in percentage

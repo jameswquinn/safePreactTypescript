@@ -77,6 +77,7 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
+const { GenerateSW } = require("workbox-webpack-plugin");
 
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -233,18 +234,14 @@ module.exports = {
       dry: false
     }),
     new VueLoaderPlugin(),
-    new CopyWebpackPlugin(
-      [
-        { from: "icons", to: "." }
-      ]
-    ),
+    new CopyWebpackPlugin([{ from: "icons", to: "." }]),
     new HtmlWebpackPlugin({
       template: "src/index.html",
       meta: {
         description: "Description website",
         author: "James Quinn",
         keywords: "website, with, meta, tags",
-        robots: "noindex, follow",
+        //robots: "noindex, follow",
         "revisit-after": "5 month",
         image: "http://mywebsite.com/image.jpg"
       },
@@ -277,6 +274,12 @@ module.exports = {
     }),
     new CompressionPlugin({
       algorithm: "gzip"
+    }),
+    new GenerateSW({
+      swDest: "service-worker.js",
+      skipWaiting: true,
+      clientsClaim: true,
+      navigateFallback: "index.html"
     }),
     new WebpackBuildNotifierPlugin({
       title: "My Project Webpack Build",
