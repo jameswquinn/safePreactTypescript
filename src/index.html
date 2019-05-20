@@ -65,13 +65,21 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
         }
+        :root {
+        --wc-color: blue;
+        }
+
+        h1 {
+        color:pink;
+        }
     </style>
 </head>
 
 <body>
-    <div id="root"></div>
-    <img src="./img/one.jpg?sizes[]=400" alt="">
-    <img src="./img/two.jpg?sizes[]=100" alt="">
+    <my-component text="Hay James..."></my-component>
+    <h1>Hello world! from outside web component</h1>
+    <!--<div id="root"></div>-->
+  
     <noscript>
         Please enable JavaScript to view this website.
     </noscript>

@@ -1,17 +1,17 @@
 /**
  * @license
  * @copyright 2019
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,11 +19,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- * 
+ *
  */
 
-const webpack = require('webpack');
-const path = require('path');
+const webpack = require("webpack");
+const path = require("path");
 
 /*
  * We've enabled Postcss, autoprefixer and precss for you. This allows your app
@@ -66,8 +66,6 @@ const TerserPlugin = require("terser-webpack-plugin");
  *
  */
 
-
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionPlugin = require("compression-webpack-plugin");
@@ -85,7 +83,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   mode: "production",
   entry: {
-    bundle: ["./src/index"]
+    bundle: ["./src/web"]
   },
   resolve: {
     extensions: [
@@ -215,7 +213,13 @@ module.exports = {
        * @description
        *
        * @example '<img src="./path/example.jpg?sizes[]=100" alt="">'
-       *
+       * @example '<img sizes="(max-width: 1024px) 100vw, auto"
+                  srcset="${responsiveImage.srcSet}"
+                  src="${responsiveImage.src}"
+                  alt="">'
+
+                  '// Outputs placeholder image as a data URI, and three images with 100, 200, and 300px widths
+                  const responsiveImage = require("./img/one.jpg?placeholder=true&sizes[]=200,sizes[]=363,sizes[]=486,sizes[]=591,sizes[]=680,sizes[]=764,sizes[]=853,sizes[]=922,sizes[]=993")'
        */
       {
         test: /\.(jpe?g|png)$/i,
