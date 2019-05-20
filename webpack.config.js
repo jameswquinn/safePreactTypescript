@@ -14,65 +14,85 @@ const path = require('path');
  *
  */
 
-/*
- * We've enabled UglifyJSPlugin for you! This minifies your app
- * in order to load faster and run less javascript.
- *
- * https://github.com/webpack-contrib/uglifyjs-webpack-plugin
- *
- */
-
-
-
-
 const autoprefixer = require("autoprefixer");
 const precss = require("precss");
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
+const TerserPlugin = require("terser-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
+const { VueLoaderPlugin } = require("vue-loader");
 
 module.exports = {
+  mode: "production",
+  entry: {
+    bundle: ["./src/index"]
+  },
+  resolve: {
+    extensions: [
+      ".mjs",
+      ".js",
+      ".jsx",
+      ".ts",
+      ".tsx",
+      ".tag",
+      ".svelte",
+      ".vue"
+    ]
+  },
+  output: {
+    path: path.join(__dirname, "dist"),
+    filename: "[name]~[contentHash].js",
+    chunkFilename: "[name]~[contentHash].[id].js"
+  },
   module: {
     rules: [
+      {
+        test: /\.svelte$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "svelte-loader",
+          options: {
+            emitCss: true,
+            hotReload: true
+          }
+        }
+      },
+      {
+        test: /\.vue$/,
+        exclude: /node_modules/,
+        use: "vue-loader"
+      },
+      {
+        test: /\.tag$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: "riot-tag-loader",
+            options: {
+              hot: true,
+              type: "es6"
+            }
+          }
+        ]
+      },
       {
         test: /\.tsx?$/,
         use: [
           {
             loader: "ts-loader",
             options: {
-              transpileOnly: true
-              //experimentalWatchApi: true
+              transpileOnly: true,
+              experimentalWatchApi: true
             }
           }
         ]
-      },
-      {
-        include: [path.resolve(__dirname, "src")],
-        loader: "babel-loader",
-
-        options: {
-          plugins: ["syntax-dynamic-import"],
-
-          presets: [
-            [
-              "@babel/preset-env",
-              {
-                modules: false
-              }
-            ]
-          ],
-          plugins: [
-            [
-              "transform-react-jsx",
-              {
-                pragma: "h"
-              }
-            ]
-          ]
-        },
-
-        test: /\.jsx?$/
       },
       {
         test: /\.s?[ac]ss$/,
@@ -101,10 +121,59 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        loader: "babel-loader",
+
+        options: {
+          plugins: ["syntax-dynamic-import"],
+
+          presets: [
+            [
+              "@babel/preset-env",
+              {
+                modules: false
+              }
+            ]
+          ],
+          plugins: [
+            [
+              "transform-react-jsx",
+              {
+                pragma: "h"
+              }
+            ]
+          ]
+        },
+
+        test: /\.jsx?$/
+      },
+      {
+        test: /\.html$/,
+        use: {
+          loader: "html-loader",
+          options: {
+            attrs: [":data-src", ":src", ":srcset", ":data-srcset"]
+          }
+        }
+      },
+      {
+        test: /\.(jpe?g|png)$/i,
+        loader: "responsive-loader",
+        options: {
+          adapter: require("responsive-loader/sharp"),
+          name: "[name]~[sha512:hash:base64:7].[ext]",
+          outputPath: "imgs"
+        }
       }
     ]
   },
   plugins: [
+    new CleanWebpackPlugin({
+      verbose: true,
+      dry: false
+    }),
+    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       template: "src/index.html",
       minify: {
@@ -123,17 +192,36 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: "[name]~[contentHash].css"
+    }),
+    new OptimizeCssAssetsPlugin(),
+    new TerserPlugin({
+      cache: true,
+      parallel: true,
+      extractComments: true,
+      sourceMap: true, // Must be set to true if using source-maps in production
+      terserOptions: {
+        // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+      }
+    }),
+    new CompressionPlugin({
+      algorithm: "gzip"
+    }),
+    new BundleAnalyzerPlugin({
+      analyzerMode: "static"
     })
   ],
-  output: {
-    chunkFilename: "[name].[chunkhash].js",
-    filename: "[name].[chunkhash].js"
-  },
-  entry: {
-    app: "./src/index"
-  },
-  resolve: {
-    extensions: [".ts", ".tsx", ".js", "jsx"]
-  },
-  mode: "production"
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendors: {
+          priority: -10,
+          test: /[\\/]node_modules[\\/]/
+        }
+      },
+      chunks: "async",
+      minChunks: 1,
+      minSize: 30000,
+      name: true
+    }
+  }
 };
