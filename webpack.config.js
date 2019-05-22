@@ -76,6 +76,12 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { GenerateSW } = require("workbox-webpack-plugin");
+
+/**
+ * 
+ * 
+ * 
+ */
 const Critters = require("critters-webpack-plugin");
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
@@ -204,14 +210,19 @@ module.exports = {
         use: {
           loader: "html-loader",
           options: {
-            attrs: [":data-src", ":src", ":srcset", ":data-srcset"]
+            attrs: [":data-src", ":src"]
           }
         }
       },
-/**
- * 
- * 
- */
+      /**
+       * We've added 'responsive-loader', a webpack loader for responsive images.
+       * It creates multiple images from one source image,
+       * and returns a srcset.
+       *
+       * https://github.com/herrstucki/responsive-loader
+       *
+       * 
+       */
       {
         test: /\.(jpe?g|png)$/i,
         loader: "responsive-loader",
@@ -232,13 +243,12 @@ module.exports = {
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([{ from: "icons", to: "." }]),
     new HtmlWebpackPlugin({
-      //template: "src/index.html",
       template: "!!prerender-loader?string!src/index.html",
       meta: {
         description: "Description website",
         author: "James Quinn",
         keywords: "website, with, meta, tags",
-        //robots: "noindex, follow",
+        robots: "index, follow",
         "revisit-after": "5 month",
         image: "http://mywebsite.com/image.jpg"
       },
@@ -281,11 +291,11 @@ module.exports = {
     }),
     new WebpackBuildNotifierPlugin({
       title: "My Project Webpack Build",
-      //logo: path.resolve("src/assets/icons/ios-icon.png"),
+      logo: path.resolve("src/icons/assets/icon.png"),
       suppressSuccess: true
     }),
     new BundleAnalyzerPlugin({
-      analyzerMode: "static"
+      analyzerMode: "disabled"
     })
   ],
   optimization: {
