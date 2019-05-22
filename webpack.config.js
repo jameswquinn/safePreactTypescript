@@ -1,5 +1,5 @@
 /**
- * @license
+ * @license MIT
  * @copyright 2019
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -25,7 +25,7 @@
 const webpack = require("webpack");
 const path = require("path");
 
-/*
+/**
  * We've enabled Postcss, autoprefixer and precss for you. This allows your app
  * to lint  CSS, support variables and mixins, transpile future CSS syntax,
  * inline images, and more!
@@ -43,7 +43,7 @@ const path = require("path");
 const autoprefixer = require("autoprefixer");
 const precss = require("precss");
 
-/*
+/**
  * We've enabled TerserPlugin for you! This minifies your app
  * in order to load faster and run less javascript.
  *
@@ -76,14 +76,14 @@ const CleanWebpackPlugin = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const { GenerateSW } = require("workbox-webpack-plugin");
-
+const Critters = require("critters-webpack-plugin");
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
   entry: {
-    bundle: ["./src/web"]
+    bundle: ["./src/index"]
   },
   resolve: {
     extensions: [
@@ -208,24 +208,16 @@ module.exports = {
           }
         }
       },
-      /**
-       *
-       * @description
-       *
-       * @example '<img src="./path/example.jpg?sizes[]=100" alt="">'
-       * @example '<img sizes="(max-width: 1024px) 100vw, auto"
-                  srcset="${responsiveImage.srcSet}"
-                  src="${responsiveImage.src}"
-                  alt="">'
-
-                  '// Outputs placeholder image as a data URI, and three images with 100, 200, and 300px widths
-                  const responsiveImage = require("./img/one.jpg?placeholder=true&sizes[]=200,sizes[]=363,sizes[]=486,sizes[]=591,sizes[]=680,sizes[]=764,sizes[]=853,sizes[]=922,sizes[]=993")'
-       */
+/**
+ * 
+ * 
+ */
       {
         test: /\.(jpe?g|png)$/i,
         loader: "responsive-loader",
         options: {
           adapter: require("responsive-loader/sharp"),
+          quality: 70,
           name: "[name]~[sha512:hash:base64:7].[ext]",
           outputPath: "imgs"
         }
@@ -240,7 +232,8 @@ module.exports = {
     new VueLoaderPlugin(),
     new CopyWebpackPlugin([{ from: "icons", to: "." }]),
     new HtmlWebpackPlugin({
-      template: "src/index.html",
+      //template: "src/index.html",
+      template: "!!prerender-loader?string!src/index.html",
       meta: {
         description: "Description website",
         author: "James Quinn",
@@ -266,6 +259,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name]~[contentHash].css"
     }),
+    new Critters(),
     new OptimizeCssAssetsPlugin(),
     new TerserPlugin({
       cache: true,

@@ -1,8 +1,5 @@
-import { render, h } from 'preact';
-import TodoList from './components/todo-list';
-import "milligram"
+import { h, render } from 'preact';
+import App from './App';
+import './index.css';
 
-render(
-  <TodoList />,
-  document.querySelector('#root')
-);
+render(<App />, document.body, document.body.querySelector('main'));

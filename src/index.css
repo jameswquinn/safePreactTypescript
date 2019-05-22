@@ -1,0 +1,57 @@
+@font-face {
+  font-family: 'Pacifico';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Pacifico Regular'), local('Pacifico-Regular'), url(https://fonts.gstatic.com/s/pacifico/v12/Q_Z9mv4hySLTMoMjnk_rCXYhjbSpvc47ee6xR_80Hnw.woff2) format('woff2');
+  /* The browser draws the text immediately in the fallback font if the font
+    isn't loaded, then swaps it with the webfont when it eventually loads
+    See: https://developers.google.com/web/updates/2016/02/font-display
+*/
+  font-display: swap;
+}
+
+html, body, main {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  color: #2d3436;
+  /* This is a font-stack that tries to use the system-default sans-serifs first */
+  font-family: Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+}
+
+header, footer {
+  align-items: center;
+  color: hsla(0, 100%, 100%, .5);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+header {
+  background: #636e72;
+  height: 50px;
+  margin-bottom: 20px;
+}
+
+section {
+  flex-grow: 1;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+footer {
+  background: #2d3436;
+  height: 200px;
+  margin-top: 20px;
+}
