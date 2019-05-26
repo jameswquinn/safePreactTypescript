@@ -260,6 +260,22 @@ module.exports = {
           name: "[name]~[sha512:hash:base64:7].[ext]",
           outputPath: "imgs"
         }
+      },
+      {
+        test: /\.svg$/,
+        use: [
+          { loader: "file-loader" },
+          {
+            loader: "svgo-loader",
+            options: {
+              plugins: [
+                { removeTitle: true },
+                { convertColors: { shorthex: false } },
+                { convertPathData: false }
+              ]
+            }
+          }
+        ]
       }
     ]
   },
