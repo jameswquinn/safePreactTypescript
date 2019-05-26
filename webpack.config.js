@@ -255,6 +255,7 @@ module.exports = {
         loader: "responsive-loader",
         options: {
           adapter: require("responsive-loader/sharp"),
+          format: "jpg",
           quality: 70,
           name: "[name]~[sha512:hash:base64:7].[ext]",
           outputPath: "imgs"
