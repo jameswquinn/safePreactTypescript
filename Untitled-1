@@ -1,0 +1,12 @@
+Child html-webpack-plugin for "index.html":
+    
+    ERROR in Entry module not found: Error: Can't resolve '/Users/jamesquinn/Downloads/safePreactTypescript-master-3/src/index.html' in '/Users/jamesquinn/Downloads/safePreactTypescript-master-3'
+jamess-MacBook-Air:safePreactTypescript-master-3 jamesquinn$ 
+
+    + 1 hidden module
+
+ERROR in ./src/components/app.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: /Users/jamesquinn/Downloads/safePreactTypescript-master-3/src/components/app.js: Support for the experimental syntax 'classProperties' isn't currently enabled (16:14):
+
+  14 |   *      @param {string} event.url       The newly routed URL

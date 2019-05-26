@@ -10,6 +10,7 @@
     "paths": {
       "*": ["types/*"],
       "preact": ["./node_modules/preact/dist/preact.d.ts"],
+      
     },
     "noEmitHelpers": true,
     "importHelpers": true

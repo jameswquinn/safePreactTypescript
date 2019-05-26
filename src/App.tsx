@@ -1,6 +1,9 @@
 import { h } from 'preact';
-const responsiveImage = require("./img/one.jpg?sizes[]=100,sizes[]=200,sizes[]=300");
-const responsiveImage2 = require("./img/two.jpg?sizes[]=100,sizes[]=200,sizes[]=300");
+import "lazysizes";
+// import a plugin
+//import "lazysizes/plugins/parent-fit/ls.parent-fit";
+const responsiveImage = require("./img/three.jpg?min=320,max=1400,steps=6");
+
 
 export default () => (
   <main>
@@ -22,8 +25,13 @@ export default () => (
         libero autem nulla, atque eveniet doloremque officia consequuntur, eius
         neque!
       </div>
-      <img srcset={responsiveImage.srcSet} src={responsiveImage.src} />
-      <img class="lazy" data-srcset={responsiveImage2.srcSet} data-src={responsiveImage2.src} />
+
+      <img
+        sizes="auto"
+        src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1880 1140'%3E%3C/svg%3E"
+        data-srcset={responsiveImage.srcSet}
+        class="lazyload"
+      />
     </article>
 
     <footer>Footer</footer>

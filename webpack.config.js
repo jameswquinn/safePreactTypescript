@@ -53,7 +53,30 @@ const precss = require("precss");
 
 const TerserPlugin = require("terser-webpack-plugin");
 
-/*
+/**
+ * 
+ * This plugin compresses assets with Brotli 
+ * compression algorithm.
+ * 
+ * https://github.com/mynameiswhm/brotli-webpack-plugin
+ * 
+ */
+
+const BrotliPlugin = require("brotli-webpack-plugin");
+
+/**
+ * 
+ * This plugin compresses assets with gzip compression 
+ * algorithm as 'fallback' position.
+ * 
+ * https://github.com/webpack-contrib/compression-webpack-plugin
+ * 
+ */
+
+const CompressionPlugin = require("compression-webpack-plugin");
+
+
+/**
  * SplitChunksPlugin is enabled by default and replaced
  * deprecated CommonsChunkPlugin. It automatically identifies modules which
  * should be splitted of chunk by heuristics using module duplication count and
@@ -68,7 +91,10 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const CompressionPlugin = require("compression-webpack-plugin");
+
+
+
+
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 const CleanWebpackPlugin = require("clean-webpack-plugin");
@@ -78,9 +104,9 @@ const { VueLoaderPlugin } = require("vue-loader");
 const { GenerateSW } = require("workbox-webpack-plugin");
 
 /**
- * 
- * 
- * 
+ *
+ *
+ *
  */
 const Critters = require("critters-webpack-plugin");
 const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
@@ -101,7 +127,8 @@ module.exports = {
       ".tag",
       ".svelte",
       ".vue"
-    ]
+    ],
+    mainFields: ["svelte", "browser", "module", "main"]
   },
   output: {
     path: path.join(__dirname, "dist"),
@@ -221,7 +248,7 @@ module.exports = {
        *
        * https://github.com/herrstucki/responsive-loader
        *
-       * 
+       *
        */
       {
         test: /\.(jpe?g|png)$/i,
@@ -246,7 +273,7 @@ module.exports = {
       template: "!!prerender-loader?string!src/index.html",
       meta: {
         description: "Description website",
-        author: "James Quinn",
+        author: "A N Other",
         keywords: "website, with, meta, tags",
         robots: "index, follow",
         "revisit-after": "5 month",
@@ -281,7 +308,17 @@ module.exports = {
       }
     }),
     new CompressionPlugin({
-      algorithm: "gzip"
+      filename: "[path].gz[query]",
+      algorithm: "gzip",
+      test: /\.js$|\.css$|\.svg$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.7
+    }),
+    new BrotliPlugin({
+      asset: "[path].br[query]",
+      test: /\.js$|\.css$|\.svg$|\.html$/,
+      threshold: 10240,
+      minRatio: 0.7
     }),
     new GenerateSW({
       swDest: "service-worker.js",

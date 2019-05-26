@@ -55,3 +55,21 @@ footer {
   height: 200px;
   margin-top: 20px;
 }
+
+img[class] {
+  width: 100%;
+}
+
+img.lazyload:not([src]) {
+	visibility: hidden;
+}
+
+/* fade image in after load */
+.lazyload,
+.lazyloading {
+	opacity: 0;
+}
+.lazyloaded {
+	opacity: 1;
+	transition: opacity 300ms;
+}
