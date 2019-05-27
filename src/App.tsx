@@ -1,5 +1,7 @@
 import { h } from 'preact';
 import "lazysizes";
+import {distanceInWordsToNow} from "date-fns";
+import {} from "lodash-es";
 // import a plugin
 //import "lazysizes/plugins/parent-fit/ls.parent-fit";
 const responsiveImage = require("./img/three.jpg?min=320,max=1400,steps=6");
@@ -27,11 +29,13 @@ export default () => (
       </div>
 
       <img
-        sizes="auto"
+        sizes="(max-width: 1400px) 100vw, 1400px"
         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1880 1140'%3E%3C/svg%3E"
         data-srcset={responsiveImage.srcSet}
         class="lazyload"
+        alt=""
       />
+      <p>time ago{' ' + distanceInWordsToNow(new Date(1558989059987))}</p>
     </article>
 
     <footer>Footer</footer>

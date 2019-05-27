@@ -54,27 +54,69 @@ const precss = require("precss");
 const TerserPlugin = require("terser-webpack-plugin");
 
 /**
- * 
- * This plugin compresses assets with Brotli 
+ *
+ * This plugin compresses assets with Brotli
  * compression algorithm.
- * 
+ *
  * https://github.com/mynameiswhm/brotli-webpack-plugin
- * 
+ *
  */
 
 const BrotliPlugin = require("brotli-webpack-plugin");
 
 /**
- * 
- * This plugin compresses assets with gzip compression 
+ *
+ * This plugin compresses assets with gzip compression
  * algorithm as 'fallback' position.
- * 
+ *
  * https://github.com/webpack-contrib/compression-webpack-plugin
- * 
+ *
  */
 
 const CompressionPlugin = require("compression-webpack-plugin");
 
+/**
+ *
+ * Critters is a Webpack plugin that inlines your app's
+ * critical CSS and lazy-loads the rest.
+ *
+ * https://github.com/GoogleChromeLabs/critters
+ *
+ */
+
+const Critters = require("critters-webpack-plugin");
+
+/**
+ *
+ * Prints the gzipped sizes of your webpack assets and
+ * the changes since the last build.
+ *
+ * https://github.com/GoogleChromeLabs/size-plugin
+ *
+ */
+
+const SizePlugin = require("size-plugin");
+
+/**
+ *
+ * webpack loader for Vue Single-File Components
+ *
+ * https://github.com/vuejs/vue-loader
+ *
+ */
+
+const { VueLoaderPlugin } = require("vue-loader");
+
+/**
+ *
+ * The GenerateSW plugin will create a service worker file
+ * for you and add it to the webpack asset pipeline.
+ *
+ * https://developers.google.com/web/tools/workbox/modules/workbox-webpack-plugin
+ *
+ */
+
+const { GenerateSW } = require("workbox-webpack-plugin");
 
 /**
  * SplitChunksPlugin is enabled by default and replaced
@@ -89,28 +131,14 @@ const CompressionPlugin = require("compression-webpack-plugin");
  *
  */
 
+const CleanWebpackPlugin = require("clean-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-
-
-
-
+const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
-const CleanWebpackPlugin = require("clean-webpack-plugin");
-
-const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
-const { VueLoaderPlugin } = require("vue-loader");
-const { GenerateSW } = require("workbox-webpack-plugin");
-
-/**
- *
- *
- *
- */
-const Critters = require("critters-webpack-plugin");
-const WebpackBuildNotifierPlugin = require("webpack-build-notifier");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "production",
@@ -232,21 +260,14 @@ module.exports = {
 
         test: /\.jsx?$/
       },
-      {
-        test: /\.html$/,
-        use: {
-          loader: "html-loader",
-          options: {
-            attrs: [":data-src", ":src"]
-          }
-        }
-      },
       /**
        * We've added 'responsive-loader', a webpack loader for responsive images.
        * It creates multiple images from one source image,
        * and returns a srcset.
        *
        * https://github.com/herrstucki/responsive-loader
+       *
+       * @example `const responsiveImage = require("example.jpg?min=320,max=1400,steps=6");`
        *
        *
        */
@@ -282,7 +303,8 @@ module.exports = {
         use: {
           loader: "file-loader",
           options: {
-            name: "fonts/[name].[ext]"
+            name: "[name]~[sha512:hash:base64:7].[ext]",
+            outputPath: "fonts"
           }
         }
       }
@@ -346,6 +368,7 @@ module.exports = {
       threshold: 10240,
       minRatio: 0.7
     }),
+    new SizePlugin(),
     new GenerateSW({
       swDest: "service-worker.js",
       skipWaiting: true,
@@ -358,7 +381,7 @@ module.exports = {
       suppressSuccess: true
     }),
     new BundleAnalyzerPlugin({
-      analyzerMode: "disabled"
+      analyzerMode: "static"
     })
   ],
   optimization: {
