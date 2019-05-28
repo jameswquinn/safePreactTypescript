@@ -1,6 +1,8 @@
 import { h } from 'preact';
 import "lazysizes";
-import {distanceInWordsToNow} from "date-fns";
+import { format, render, cancel, register } from "timeago.js";
+
+//import {distanceInWordsToNow} from "date-fns";
 import {} from "lodash-es";
 // import a plugin
 //import "lazysizes/plugins/parent-fit/ls.parent-fit";
@@ -35,7 +37,7 @@ export default () => (
         class="lazyload"
         alt=""
       />
-      <p>time ago{' ' + distanceInWordsToNow(new Date(1558989059987))}</p>
+      <p>{format(1559044158103)}</p>
     </article>
 
     <footer>Footer</footer>
